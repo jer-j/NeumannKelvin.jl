@@ -128,7 +128,7 @@ function measure(S,u,v,du,dv;flip=false,cubature=false,Δg=SA_F32[-1/√3,1/√3
     xᵤᵥ = S.(u .+ SA[-du,du]/2, v .+ SA[-dv,dv]'/2)
     nᵤᵥ = normalize.(normal.(S, u .+ SA[-du,du]/2, v .+ SA[-dv,dv]'/2))
     # combine everything into named tuple
-    (x=x, n=n, dA=dA, xg=x₄, wg=dA₄ .* dA/sum(dA₄), verts=unwrap(xᵤᵥ), nverts=unwrap(nᵤᵥ), kernel=QuadKernel())
+    (;x, n, dA, xg=x₄, wg=dA₄ .* dA/sum(dA₄), ng=normalize.(n₄), verts=unwrap(xᵤᵥ), nverts=unwrap(nᵤᵥ), kernel=QuadKernel())
 end
 normal(S,u,v) = derivative(u->S(u,v),u)×derivative(v->S(u,v),v)
 normalize(v::SVector{n,T}) where {n,T} = v/(eps(T)+norm(v))
