@@ -56,6 +56,7 @@ function panelize(surface,u₀=0,u₁=1f0,v₀=0,v₁=1f0;hᵤ=1,hᵥ=hᵤ,devli
     length(panels) ≤ N_max && return Table(panels)
     throw(ArgumentError("length(panels)=$(length(panels))>$N_max. Increase hᵤ,hᵥ,devlimit and/or N_max."))
 end
+panelize(patches::AbstractArray,args...;kwargs...) = mapreduce(patch->panelize(patch,args...;kwargs...),vcat,patches)
 function newlimits(r,low,high)
     z(u) = r(u)[3]+√eps(u)
     zero = find_zero(z,(low,high))

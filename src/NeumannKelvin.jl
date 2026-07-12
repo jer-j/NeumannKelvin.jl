@@ -78,7 +78,8 @@ function xyζ(sys::FSPanelSystem; ignore...)
     x,y,_ = reshape.(components(sys.freesurf.x),Ref(size(sys.fsm)))
     return x,y,ζ(sys) .* sys.ℓ
 end
-export viz,components,extent
+loadNURBS(args...;kwargs...) = @warn "Load NURBS and FileIO for loadNURBS functionality."
+export viz,components,extent,loadNURBS
 
 # Initialize chebregions on precompile instead of when `using NeumannKelvin`
 __init__() = chebregions[] = (makecheb(eps(),1),makecheb(1,4),makecheb(4,10),makecheb(1e-5,1;xfrm=r2R))

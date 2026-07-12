@@ -303,6 +303,8 @@ using NURBS,FileIO
     @test !all(iszero, grad)  # Should have non-zero gradients
 
     # measure a whole patch as one panel
+    sphere = loadNURBS(pkgdir(NURBS) * "/test/assets/sphere.stp")
+    patch = sphere[1]
     panel = measure(patch,0.5,0.5,1.0,1.0)
     @test panel.kernel isa NeumannKelvin.QuadKernel
     @test panel.dA ≈ 4π/6 rtol=0.03
