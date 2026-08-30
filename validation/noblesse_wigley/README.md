@@ -65,6 +65,7 @@ The following environment variables control the calculation:
 | `NK_FILTER` | `true` | Apply the package's panel-scale wave filter |
 | `NK_CONTOUR` | `true` | Apply the Baar waterline contour correction |
 | `NK_SOLVER` | `direct` | `direct` or `gmres` |
+| `NK_PLOT` | `true` | Create PNG figures with CairoMakie |
 | `NK_FROUDE_NUMBERS` | all six cases | Comma-separated subset |
 | `NK_OUTPUT` | `validation/noblesse_wigley/results` | Output directory |
 
