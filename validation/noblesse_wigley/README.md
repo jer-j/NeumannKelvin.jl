@@ -94,6 +94,42 @@ The calculated wave cut is evaluated slightly outside the hull waterline. The of
 in every wave-cut CSV file. This avoids evaluating the source-panel representation precisely
 on a waterline edge and makes the numerical convention reproducible.
 
+`coefficients.csv` also reports two numerical diagnostics. `c_wave_bernoulli` uses the complete
+perturbation-pressure expression instead of the linear pressure used for `c_wave_near`.
+`bc_max_abs` and `bc_rms` measure the no-penetration residual at the collocation points.
+
+## Reproducibility checks
+
+The checked reference data contain a three-level mesh sequence and a complete two-by-two
+sensitivity study for `filter` and `contour` at `80 x 12`. They are stored in
+[`reference/mesh_convergence.csv`](reference/mesh_convergence.csv) and
+[`reference/model_sensitivity_80x12.csv`](reference/model_sensitivity_80x12.csv).
+
+For the `80 x 12`, filtered, contour-corrected run, the main coefficients are:
+
+| `F` | `C_wave^near` | `h` | `tau` |
+|---:|---:|---:|---:|
+| 0.250 | 0.00008287 | 0.0011766 | 0.0003736 |
+| 0.267 | 0.00007105 | 0.0013720 | 0.0006879 |
+| 0.289 | 0.00012157 | 0.0016647 | 0.0013992 |
+| 0.316 | 0.00010735 | 0.0019334 | 0.0013763 |
+| 0.354 | 0.00011918 | 0.0026010 | 0.0032487 |
+| 0.408 | 0.00015724 | 0.0037684 | 0.0097756 |
+
+The direct solves satisfy the discrete body boundary condition to about `7e-17` RMS. Between
+the `40 x 8` and `80 x 12` meshes, sinkage changes by 2.7-4.0 percent, while the drag and trim
+remain more oscillatory and can change by roughly 12 percent at individual Froude numbers.
+The wave filter has a modest effect on this mesh. The Baar contour correction has a much larger
+effect on drag and trim, especially at the higher Froude numbers.
+
+These calculations reproduce the Noblesse Wigley geometry, Froude-number cases, and output
+normalizations, but they do not reproduce the paper's NM curves. In particular, the present
+NK near-field drag lies visibly below the NM and experimental curves in Fig. 3. This is a
+formulation-level result, not a linear-solver residual: the package uses an indirect
+Kelvin-source equation and an optional panel correction, whereas the paper solves the NM
+equation. A quantitative experimental error norm still requires a documented digitization or
+the original tabulated measurements.
+
 The existing `NKPanelSystem` is an indirect Kelvin-source formulation. The `contour=true`
 option is the package's Baar-type source-panel correction and is not the complete direct NK
 waterline integral. Both `NK_CONTOUR=true/false` and `NK_FILTER=true/false` should therefore
