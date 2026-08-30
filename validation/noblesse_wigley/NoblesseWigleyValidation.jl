@@ -5,6 +5,15 @@ using GeometryBasics
 using NeumannKelvin
 using StaticArrays
 
+export NOBLESSE_FROUDE_NUMBERS,
+    linear_hydrodynamic_coefficients,
+    run_validation,
+    solve_wigley_case,
+    waterline_halfbreadth,
+    wave_cut,
+    wigley_panels,
+    wigley_point
+
 const NOBLESSE_FROUDE_NUMBERS = (0.250, 0.267, 0.289, 0.316, 0.354, 0.408)
 
 """
@@ -116,14 +125,14 @@ function linear_hydrodynamic_coefficients(system; beam=0.1)
     velocity = u(system)
     phi_x = getindex.(velocity, 1) .- system.U[1]
 
-    c_wave_near = 2sum(panels.n[i][1] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
-    c_lift = 2sum(panels.n[i][3] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
-    c_pitch = 2sum(
+    c_wave_near = 2 * sum(panels.n[i][1] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
+    c_lift = 2 * sum(panels.n[i][3] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
+    c_pitch = 2 * sum(
         (panels.n[i][1] * panels.x[i][3] - panels.n[i][3] * panels.x[i][1]) *
         phi_x[i] * panels.dA[i] for i in eachindex(phi_x)
     )
 
-    waterplane_area = 2beam / 3
+    waterplane_area = 2 * beam / 3
     waterplane_second_moment = beam / 30
     Fn2 = system.args.ℓ
     sinkage = Fn2 * c_lift / waterplane_area
