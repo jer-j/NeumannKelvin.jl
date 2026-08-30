@@ -31,7 +31,9 @@ jobs:
       NK_FILTER: "true"
       NK_CONTOUR: "true"
       NK_SOLVER: direct
+      NK_PLOT: "false"
       NK_OUTPUT: validation/noblesse_wigley/results
+      JULIA_PKG_PRECOMPILE_AUTO: "0"
       JULIA_NUM_THREADS: auto
     steps:
       - uses: actions/checkout@v6
