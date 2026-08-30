@@ -28,6 +28,14 @@ The first install will take a few seconds as a few functions precompile, but the
 
 The solver is still in development (v0.8), but the interface and methods are stablizing. We should be ready for v1.0 after feedback from users.
 
+## Published-case validation
+
+The [`validation/noblesse_wigley`](validation/noblesse_wigley) study applies the existing
+`NKPanelSystem` to the Wigley geometry, Froude numbers, wave-cut normalization, and
+hydrodynamic coefficients used by Noblesse et al. (2013). It provides the NK baseline for
+future NM and NN comparisons, together with explicit panel, wave-filter, waterline-contour,
+and field-point-offset settings.
+
 ## Basic usage
 
 The panels themselves can either be defined by reading in a triangle-based Mesh object or by measuring a parametric surface. For example a spheroid under the free-surface may be defined as:

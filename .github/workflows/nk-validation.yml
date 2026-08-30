@@ -1,0 +1,56 @@
+name: NK Noblesse validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      nx:
+        description: Longitudinal panel count
+        required: false
+        default: "40"
+      nz:
+        description: Vertical panel count
+        required: false
+        default: "8"
+  push:
+    branches:
+      - codex/nk-noblesse-validation
+    paths:
+      - "src/**"
+      - "ext/**"
+      - "validation/noblesse_wigley/**"
+      - ".github/workflows/nk-validation.yml"
+
+concurrency:
+  group: nk-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NK_NX: ${{ inputs.nx || '24' }}
+      NK_NZ: ${{ inputs.nz || '4' }}
+      NK_ELEMENT: quadrilateral
+      NK_FILTER: "true"
+      NK_CONTOUR: "true"
+      NK_SOLVER: direct
+      NK_PLOT: "false"
+      NK_OUTPUT: validation/noblesse_wigley/results
+      JULIA_PKG_PRECOMPILE_AUTO: "0"
+      JULIA_NUM_THREADS: auto
+    steps:
+      - uses: actions/checkout@v6
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1"
+      - uses: julia-actions/cache@v3
+      - name: Test validation utilities
+        run: julia --project=validation/noblesse_wigley validation/noblesse_wigley/test_validation.jl
+      - name: Run NK validation sweep
+        run: julia --project=validation/noblesse_wigley validation/noblesse_wigley/run.jl
+      - name: Upload validation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: nk-noblesse-validation
+          path: validation/noblesse_wigley/results
