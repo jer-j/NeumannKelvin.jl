@@ -32,7 +32,7 @@ jobs:
       NK_NX: ${{ inputs.nx || '80' }}
       NK_NZ: ${{ inputs.nz || '12' }}
       NK_ELEMENT: quadrilateral
-      NK_FILTER: "false"
+      NK_FILTER: "true"
       NK_CONTOUR: "false"
       NK_SOLVER: direct
       NK_PLOT: "false"
