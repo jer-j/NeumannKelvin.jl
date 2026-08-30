@@ -29,8 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      NK_NX: ${{ inputs.nx || '40' }}
-      NK_NZ: ${{ inputs.nz || '8' }}
+      NK_NX: ${{ inputs.nx || '80' }}
+      NK_NZ: ${{ inputs.nz || '12' }}
       NK_ELEMENT: quadrilateral
       NK_FILTER: "true"
       NK_CONTOUR: "true"
