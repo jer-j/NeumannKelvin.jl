@@ -2,6 +2,7 @@ module NoblesseWigleyValidation
 
 using CSV
 using GeometryBasics
+using LinearAlgebra: dot
 using NeumannKelvin
 using StaticArrays
 
