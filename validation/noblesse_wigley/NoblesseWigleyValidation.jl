@@ -119,13 +119,23 @@ end
 Calculate Noblesse's linear near-field coefficients from `phi_x` on the half hull.
 The returned sinkage and trim are the equilibrium values obtained from linear hydrostatic
 restoring coefficients for the fixed Wigley waterplane.
+
+`c_wave_bernoulli` uses the complete perturbation-pressure relation
+`p_star = phi_x - dot(grad(phi), grad(phi)) / 2`. It is reported as a diagnostic and
+is not substituted for the paper's linear `c_wave_near` coefficient. The boundary-condition
+residuals use the total velocity `U + grad(phi)` at the panel collocation points.
 """
 function linear_hydrodynamic_coefficients(system; beam=0.1)
     panels = system.body
     velocity = u(system)
     phi_x = getindex.(velocity, 1) .- system.U[1]
+    pressure_coefficient = 1 .- sum.(abs2, velocity) ./ sum(abs2, system.U)
+    normal_velocity = dot.(velocity, panels.n)
 
     c_wave_near = 2 * sum(panels.n[i][1] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
+    c_wave_bernoulli = sum(
+        panels.n[i][1] * pressure_coefficient[i] * panels.dA[i] for i in eachindex(phi_x)
+    )
     c_lift = 2 * sum(panels.n[i][3] * phi_x[i] * panels.dA[i] for i in eachindex(phi_x))
     c_pitch = 2 * sum(
         (panels.n[i][1] * panels.x[i][3] - panels.n[i][3] * panels.x[i][1]) *
@@ -138,7 +148,10 @@ function linear_hydrodynamic_coefficients(system; beam=0.1)
     sinkage = Fn2 * c_lift / waterplane_area
     trim = Fn2 * c_pitch / waterplane_second_moment
 
-    (; c_wave_near, c_lift, c_pitch, sinkage, trim)
+    bc_max_abs = maximum(abs, normal_velocity)
+    bc_rms = sqrt(sum(abs2, normal_velocity) / length(normal_velocity))
+
+    (; c_wave_near, c_wave_bernoulli, c_lift, c_pitch, sinkage, trim, bc_max_abs, bc_rms)
 end
 
 """
