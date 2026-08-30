@@ -36,5 +36,7 @@ run_validation(
     solver,
 )
 
-include(joinpath(VALIDATION_DIRECTORY, "plot.jl"))
-plot_validation(output_directory)
+if parse_bool(get(ENV, "NK_PLOT", "true"))
+    include(joinpath(VALIDATION_DIRECTORY, "plot.jl"))
+    plot_validation(output_directory)
+end
