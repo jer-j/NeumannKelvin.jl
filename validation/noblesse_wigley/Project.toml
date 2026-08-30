@@ -1,0 +1,18 @@
+name = "NoblesseWigleyValidation"
+uuid = "36dd5897-b311-4b91-b355-4382d8e99289"
+version = "0.1.0"
+
+[deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
+NeumannKelvin = "7f078b06-e5c4-4cf8-bb56-b92882a0ad03"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+CairoMakie = "0.13, 0.14, 0.15"
+CSV = "0.10"
+GeometryBasics = "0.4, 0.5"
+NeumannKelvin = "0.9"
+StaticArrays = "1"
+julia = "1.10"
